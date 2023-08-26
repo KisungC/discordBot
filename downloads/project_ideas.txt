@@ -1,0 +1,4 @@
+directly sending youtube videos to my phone using an app/extension
+using gpt to summarize context of the page - done
+reservation project, bot
+doing cool things with AI - such as making a software that is easy to use and train AI, using AI to predict stock movements, help students understand and study by feeding in prof's notes etc.
