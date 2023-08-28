@@ -37,7 +37,7 @@ async def on_message(userMessage):
                 return
             
             #have ai look over the content
-            await userMessage.channel.send('How can I help you?')
+            await userMessage.channel.send('Ask me anything based on the documentation that you have uploaded!')
 
             def check(msg, user_message=userMessage):
                 return msg.author == user_message.author and msg.channel==user_message.channel
