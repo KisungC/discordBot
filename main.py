@@ -1,5 +1,6 @@
 import discord
 import os
+import asyncio
 from discord.ext import commands
 from dotenv import load_dotenv
 import ai
@@ -32,19 +33,25 @@ async def on_message(userMessage):
                 print ("successfully read the document ", content)
             else:
                 print("error - failed to retrieve the document")
-                await userMessage.channel.send("Something went wrong, couldn't read the message that you sent. .txt file works the best.")
+                await userMessage.channel.send("Something went wrong, couldn't read the message that you uploaded. .txt file works the best.")
                 return
+            
             #have ai look over the content
-            
             await userMessage.channel.send('How can I help you?')
-            question = userMessage.content
+
+            def check(msg, user_message=userMessage):
+                return msg.author == user_message.author and msg.channel==user_message.channel
             
-            aiAnswer = ai.send_data_ai(content,question)
+        try:
+            question = await client.wait_for("message", check=check)
+            user_question = question.content  # Extract the user's question from the message
+            print(user_question)
+
+            aiAnswer = ai.send_data_ai(content, user_question)
             await userMessage.channel.send(aiAnswer)
+        except asyncio.TimeoutError:
+            await userMessage.channel.send("You took too long to ask a question.")
 
-
-    else:
-        await userMessage.channel.send('Command not listed, type !help for command list')
 
 # def send_question_to_ai(question):
 # pass in the question from the user input, export/import from ai.py.

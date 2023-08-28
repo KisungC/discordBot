@@ -1,11 +1,8 @@
 import os
 import openai
-import main
 from dotenv import load_dotenv
-
+load_dotenv()
 openai.api_key = os.getenv('ai_api_key')
-
-
 
 def send_data_ai(content, question):
   global userMessage, userQuestion
@@ -15,7 +12,7 @@ def send_data_ai(content, question):
   model="gpt-3.5-turbo",
   messages=[
     {"role": "system", "content": "You are a programming teacher. Only help by giving relavent examples and explanation; do not give the direct answer."},
-    {"role": "user", "content": "This is the note from my class: "+ userMessage + "using this knowledge, answer my question: " + userQuestion}
+    {"role": "user", "content": "This is the note from my class: "+ userMessage.decode() + "using this knowledge, answer my question: " + str(userQuestion)}
   ]
 )
   return completion.choices[0].message.content
