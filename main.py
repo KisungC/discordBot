@@ -1,7 +1,8 @@
 import discord
 import os
-import requests
+from discord.ext import commands
 from dotenv import load_dotenv
+import ai
 
 load_dotenv()
 
@@ -25,17 +26,25 @@ async def on_message(userMessage):
 
     if userMessage.attachments:
         for attachment in userMessage.attachments:
-            global global_content
+            #read the user uploaded file
             content = await attachment.read(use_cached=False)
-            global_content = content
-            print ("successfully read the document ", global_content)
-            await userMessage.channel.send('how can I help you?')
+            if content:
+                print ("successfully read the document ", content)
+            else:
+                print("error - failed to retrieve the document")
+                await userMessage.channel.send("Something went wrong, couldn't read the message that you sent. .txt file works the best.")
+                return
+            #have ai look over the content
+            
+            await userMessage.channel.send('How can I help you?')
+            question = userMessage.content
+            
+            aiAnswer = ai.send_data_ai(content,question)
+            await userMessage.channel.send(aiAnswer)
+
 
     else:
         await userMessage.channel.send('Command not listed, type !help for command list')
-
-# def send_content_to_ai(content):
-# pass in content, export/import from ai.py.
 
 # def send_question_to_ai(question):
 # pass in the question from the user input, export/import from ai.py.
